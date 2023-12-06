@@ -2,11 +2,14 @@
 
 namespace App\Providers;
 
+use App\Models\User;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\View;
 
 class RouteServiceProvider extends ServiceProvider
 {
@@ -17,7 +20,7 @@ class RouteServiceProvider extends ServiceProvider
      *
      * @var string
      */
-    public const HOME = '/dashboard';
+    public const HOME = '/posts';
 
     /**
      * Define your route model bindings, pattern filters, and other route configuration.
@@ -26,6 +29,11 @@ class RouteServiceProvider extends ServiceProvider
     {
         RateLimiter::for('api', function (Request $request) {
             return Limit::perMinute(60)->by($request->user()?->id ?: $request->ip());
+        });
+
+        View::composer('layouts.app', function ($view) {
+            $friends = Auth::user()->friends()->get();
+            $view->with('friends', $friends);
         });
 
         $this->routes(function () {

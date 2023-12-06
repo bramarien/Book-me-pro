@@ -13,7 +13,7 @@
         @csrf
     </form>
 
-    <form method="post" action="{{ route('profile.update') }}" class="mt-6 space-y-6">
+    <form method="post" enctype="multipart/form-data" action="{{ route('profile.update') }}" class="mt-6 space-y-6">
         @csrf
         @method('patch')
 
@@ -45,6 +45,24 @@
                     @endif
                 </div>
             @endif
+        </div>
+
+        <div>
+            <x-input-label for="bio" :value="__('Bio')" />
+            <x-text-input id="bio" name="bio" type="text" class="mt-1 block w-full" :value="old('bio', $user->bio)" required autofocus autocomplete="bio" />
+            <x-input-error class="mt-2" :messages="$errors->get('bio')" />
+        </div>
+
+        <div>
+            <x-input-label for="image_profile" :value="__('Profile picture')" />
+            <x-text-input id="image_profile" name="image_profile" type="file" class=" mt-1 block w-full" autofocus />
+            {{-- <x-input-error class="mt-2" :messages="$errors->get('image_profile')" /> --}}
+        </div>
+
+        <div>
+            <x-input-label for="image_bg" :value="__('Profile background')" />
+            <x-text-input id="image_bg" name="image_bg" type="file" class="mt-1 block w-full" autofocus />
+            {{-- <x-input-error class="mt-2" :messages="$errors->get('image_bg')" /> --}}
         </div>
 
         <div class="flex items-center gap-4">
